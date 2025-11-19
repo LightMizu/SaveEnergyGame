@@ -39,9 +39,6 @@ sources/0 = SubResource("TileSetAtlasSource_i75qf")
 pattern_0 = SubResource("TileMapPattern_cw3ig")
 pattern_1 = SubResource("TileMapPattern_puhl0")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7mycd"]
-radius = 20.0
-
 [sub_resource type="Gradient" id="Gradient_5vw27"]
 interpolation_mode = 2
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -53,6 +50,9 @@ height = 128
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7mycd"]
+radius = 7.4535556
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lquwl"]
 radius = 79.0
@@ -118,16 +118,10 @@ position_smoothing_speed = 3.0
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-visible = false
-scale = Vector2(0.1, 0.1)
-shape = SubResource("CircleShape2D_7mycd")
-metadata/_edit_lock_ = true
-
 [node name="PointLight2D" type="PointLight2D" parent="Player"]
-energy = 0.0
+enabled = false
+blend_mode = 2
 range_layer_max = 2
-shadow_enabled = true
 shadow_color = Color(0, 0, 0, 1)
 texture = SubResource("GradientTexture2D_kek77")
 texture_scale = 2.5
@@ -137,17 +131,39 @@ modulate = Color(0, 1, 0.05, 1)
 scale = Vector2(0.12, 0.12)
 texture = ExtResource("1_w8mkk")
 
-[node name="RayCast2D" type="RayCast2D" parent="Player"]
+[node name="Rays" type="Node2D" parent="Player"]
+
+[node name="RayCast2D" type="RayCast2D" parent="Player/Rays"]
+position = Vector2(0, -4.3333335)
 target_position = Vector2(0, -320)
+collide_with_areas = true
 
-[node name="RayCast2D2" type="RayCast2D" parent="Player"]
+[node name="RayCast2D2" type="RayCast2D" parent="Player/Rays"]
+position = Vector2(0, 4.666667)
 target_position = Vector2(0, 320)
+collide_with_areas = true
 
-[node name="RayCast2D3" type="RayCast2D" parent="Player"]
+[node name="RayCast2D3" type="RayCast2D" parent="Player/Rays"]
+position = Vector2(5, 0)
 target_position = Vector2(320, 0)
+collide_with_areas = true
 
-[node name="RayCast2D4" type="RayCast2D" parent="Player"]
+[node name="RayCast2D4" type="RayCast2D" parent="Player/Rays"]
+position = Vector2(-4.666667, 0)
 target_position = Vector2(-320, 0)
+collide_with_areas = true
+
+[node name="Area2D" type="Area2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Area2D"]
+scale = Vector2(0.10000001, 0.10000001)
+shape = SubResource("CircleShape2D_7mycd")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Player"]
+scale = Vector2(0.10000001, 0.10000001)
+shape = SubResource("CircleShape2D_7mycd")
+metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -187,9 +203,11 @@ debug_color = Color(0.9571354, 1.732707e-06, 0.5368034, 0.41960785)
 collision_mask = 4
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
+layer = 3
 script = ExtResource("8_5vw27")
 
 [node name="Control" type="Control" parent="CanvasLayer2"]
+top_level = true
 layout_mode = 3
 anchor_right = 1.041
 anchor_bottom = 1.0
@@ -199,6 +217,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="CanvasLayer2/Control"]
+top_level = true
 layout_mode = 0
 offset_left = 1.0
 offset_right = 351.0
@@ -207,26 +226,27 @@ text = "ЛАМП: 10/10"
 label_settings = SubResource("LabelSettings_272bh")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer2/Control"]
+top_level = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.74500006
 anchor_top = 0.763
 anchor_right = 0.998
 anchor_bottom = 1.021
-offset_left = -1004.2399
-offset_top = -558.69
-offset_right = 0.30395508
-offset_bottom = -0.2300415
+offset_left = -1002.24005
+offset_top = -574.4241
+offset_right = 2.303955
+offset_bottom = -21.608093
 grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(0.225, 0.225)
+scale = Vector2(0.31, 0.31)
 pivot_offset = Vector2(1296, 721)
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="CanvasLayer2/Control/SubViewportContainer"]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(1295, 721)
+size = Vector2i(1296, 720)
 render_target_update_mode = 4
 script = ExtResource("8_kek77")
 
@@ -240,14 +260,18 @@ limit_right = 1248
 limit_bottom = 673
 
 [node name="CanvasLayer" type="CanvasLayer" parent="CanvasLayer2/Control/SubViewportContainer/SubViewport/Node2D"]
+layer = 6
 
 [node name="Line2D" type="Line2D" parent="CanvasLayer2/Control/SubViewportContainer/SubViewport/Node2D/CanvasLayer"]
-width = 12.0
-joint_mode = 2
+z_index = 1
+joint_mode = 1
 begin_cap_mode = 2
 end_cap_mode = 2
+sharp_limit = 11.455
+round_precision = 32
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer2/Control/SubViewportContainer/SubViewport/Node2D/CanvasLayer"]
+visible = false
 z_index = -1
 offset_left = -1.7783203
 offset_right = 1295.9993
@@ -255,6 +279,10 @@ offset_bottom = 720.99976
 color = Color(0, 0, 0, 0.61960787)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
+visible = false
+visibility_layer = 2
+z_index = -1
+color = Color(0, 0, 0, 1)
 
 [node name="Device" type="Node2D" parent="."]
 position = Vector2(1176, 24)
@@ -262,8 +290,6 @@ position = Vector2(1176, 24)
 [node name="PointLight2D" type="PointLight2D" parent="Device"]
 enabled = false
 color = Color(1, 0.72156864, 0, 1)
-energy = 0.0
-shadow_enabled = true
 shadow_color = Color(0, 0, 0, 1)
 shadow_filter_smooth = 17.2
 texture = SubResource("GradientTexture2D_4c57u")
@@ -272,4 +298,6 @@ metadata/cell_pos = Vector2i(0, 0)
 
 [connection signal="done" from="generator" to="Player" method="_on_generator_done"]
 [connection signal="done" from="generator" to="Blue" method="_on_generator_done"]
+[connection signal="area_entered" from="Player/Area2D" to="Player" method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Player/Area2D" to="Player" method="_on_area_2d_area_exited"]
 [connection signal="body_entered" from="Blue/Area2D" to="Blue" method="_on_area_2d_body_entered"]

@@ -45,12 +45,16 @@ var stack: Array[Vector2i] = []  # стек для DFS
 var started: bool = false
 var post_processed: bool = false
 var room_mask = Dictionary()
+
+var tunnels := Array()
+
 var room_polygons = Array()
 
 # ─── ЖИЗНЕННЫЙ ЦИКЛ ─────────────────────────────────────────────────────────────
 
 func _ready() -> void:
-	randg.seed = 1153908204889024133
+	#randg.seed = 1153908204889024133
+	randg.randomize()
 	_init_grid()
 	set_process(true)
 	
@@ -80,11 +84,10 @@ func _process(_delta: float) -> void:
 			special_chance_step,
 			special_max_chance
 		)
-		
+		_build_minimap()
 		post_processed = true
 		emit_signal("done")
 		queue_redraw()
-		print()
 		set_process(false)
 		
 
@@ -274,16 +277,18 @@ func _draw() -> void:
 	# Рисуем рёбра
 	var debug_polygon := PackedVector2Array()
 	for comp in debug_polyg:
-		var col:= Color(1,0,0,255)
+		var col:= Color(randf(),randf(),randf(),1)
 		for e in range(len(comp)):
 			debug_polygon.push_back(to_local(comp[e]*48+Vector2.ONE*24))
-		#draw_colored_polygon(debug_polygon,col)
+		draw_colored_polygon(debug_polygon,col)
 		debug_polygon.clear()
 	for comp in debug_vert:
 		var col:= Color(0,1,0,255)
 		for e in comp:
 			pass
-			#draw_circle(to_local(e*48+Vector2.ONE*24),10,col)
+			draw_circle(to_local(e*3),10,col)
+	for line in tunnels:
+		draw_line(to_local(line[0]),to_local(line[1]),Color(0,0,1,255),5.0,true)
 		
 
 
@@ -332,7 +337,7 @@ func _build_room_collisions() -> void:
 		var polygon := PackedVector2Array()
 		polygon.push_back(component.min()*16+Vector2.ONE*8)
 		debug_polyg.append([component.min()])
-		debug_vert.append(component)
+		
 		while q:
 			var vert:Vector2 = q.pop_back()
 			var min_d := 10e9
@@ -348,6 +353,15 @@ func _build_room_collisions() -> void:
 				polygon.append(min_vert*16+Vector2.ONE*8)
 				visited_point.append(min_vert)
 				debug_polyg[-1].append(min_vert)
+		var i: = 0
+		while i < len(polygon)-1:
+			
+			if (polygon[i-1].direction_to(polygon[i+1]) - polygon[i-1].direction_to(polygon[i])).distance_to(Vector2.ZERO) < 0.001:
+				polygon.remove_at(i)
+				i-=1
+				pass
+			i+=1
+		debug_vert.append(polygon)
 		#polygon.append(min_vert*16+Vector2.ONE*8)
 		polyg.polygon = polygon
 		polyg.position=Vector2(0,0)
@@ -355,3 +369,49 @@ func _build_room_collisions() -> void:
 		if component.size() == 0:
 			continue
 		
+
+
+# Клетка является КОРИДОРОМ, а не комнатой
+func _is_corridor(cell: Vector2i) -> bool:
+	return _is_floor(cell) and not room_mask.has(cell)
+
+# Собираем все коридоры как максимальные прямые отрезки
+func _build_minimap() -> void:
+	tunnels.clear()
+
+	for y in range(maze_size.y):
+		for x in range(maze_size.x):
+			var cell := Vector2i(x, y)
+
+			# Нас интересуют только коридоры
+			if not _is_corridor(cell):
+				continue
+
+			for dir in DIRS:
+				var prev := cell - dir
+
+				# Если сзади в этом направлении тоже коридор — значит,
+				# это НЕ начало отрезка, пропускаем, чтобы не дублировать.
+				if _is_corridor(prev):
+					continue
+
+				var start := cell
+				var cur := cell
+
+				# ЕСЛИ сзади комната — расширяем начало отрезка
+				if room_mask.has(prev):
+					start = prev
+
+				# Тянем отрезок вперёд, пока подряд идут клетки коридора
+				while _is_corridor(cur + dir):
+					cur += dir
+
+				var end := cur
+				var next := cur + dir
+
+				# ЕСЛИ впереди комната — добавляем одну клетку комнаты
+				if room_mask.has(next):
+					end = next
+
+				# Добавляем отрезок [start, end]
+				tunnels.append([Vector2(start)*48+Vector2.ONE*24, Vector2(end)*48+Vector2.ONE*24])
