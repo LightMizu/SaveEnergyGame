@@ -1,0 +1,16 @@
+[gd_resource type="NoiseTexture2D" load_steps=3 format=3 uid="uid://c7oikh20v65di"]
+
+[sub_resource type="Gradient" id="Gradient_f0qv4"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_glreb"]
+noise_type = 3
+seed = -460
+frequency = 0.3394
+offset = Vector3(562.5, 0, 0)
+fractal_weighted_strength = 0.59
+metadata/_preview_in_3d_space_ = true
+
+[resource]
+resource_local_to_scene = true
+noise = SubResource("FastNoiseLite_glreb")
+color_ramp = SubResource("Gradient_f0qv4")

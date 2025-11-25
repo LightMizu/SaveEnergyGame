@@ -34,7 +34,7 @@ const DIRS: Array[Vector2i] = [
 @export var special_chance_step: float = 0.0003          # сколько добавлять за каждый "провал"
 @export var special_max_chance: float = 1            # максимум (чтобы не зашкаливало)
 
-@onready var Maze: TileMapLayer = $"../maze"
+@onready var Maze = $"../maze"
 @onready var maze_size: Vector2i = Maze.get_used_rect().size
 
 var randg := RandomNumberGenerator.new()
@@ -87,9 +87,10 @@ func _process(_delta: float) -> void:
 		_build_minimap()
 		post_processed = true
 		emit_signal("done")
-		queue_redraw()
+		#queue_redraw()
 		set_process(false)
 		
+
 
 # ─── ИНИЦИАЛИЗАЦИЯ ──────────────────────────────────────────────────────────────
 
@@ -161,7 +162,7 @@ func _is_wall(c: Vector2i) -> bool:
 
 
 func _is_floor(c: Vector2i) -> bool:
-	return _atlas_at(c) == TILE_FLOOR_ATLAS or _atlas_at(c) == TILE_SPECIAL_ATLAS or _atlas_at(c) == Vector2i(2,1)
+	return _atlas_at(c) != TILE_WALL_ATLAS
 
 
 func _set_floor(c: Vector2i) -> void:
@@ -236,16 +237,44 @@ func _place_special_tiles_progressive(
 
 			if randg.randf() < chance:
 				# успех — ставим спец-тайл и сбрасываем шанс
-				Maze.set_cell(c, SOURCE_ID, TILE_SPECIAL_ATLAS)
-				var light: Node2D = $"../Device/PointLight2D".duplicate() 
-				light.position = Maze.to_global(Maze.map_to_local(c))
-				light.set_meta("cell_pos", c)
-				light.enabled = true
-				get_tree().root.add_child(light)
+				Maze.set_device(c)
 				chance = 0
 			else:
 				# провал — шанс растёт
 				chance = min(chance + step, max_chance)
+
+func simplify_collinear(
+	vertices: PackedVector2Array,
+	epsilon: float = 0.1
+) -> PackedVector2Array:
+	var n := vertices.size()
+	if n <= 3:
+		return vertices  # меньше 3 вершин уже не упростишь
+
+	var result := PackedVector2Array()
+
+	# Считаем, что полигон замкнутый (последняя вершина соединяется с первой)
+	for i in range(n):
+		var prev := vertices[(i - 1 + n) % n]
+		var curr := vertices[i]
+		var next := vertices[(i + 1) % n]
+
+		var ab := curr - prev
+		var bc := next - curr
+
+		# если вектор почти нулевой (две одинаковые точки) — тоже выкидываем curr
+		if ab.length_squared() < epsilon or bc.length_squared() < epsilon:
+			continue
+		
+		var cross := ab.cross(bc)
+		if curr.distance_to(Vector2.ONE*24) < 1:
+			continue
+		# если не коллинеарно — оставляем вершину
+		if abs(cross) > epsilon:
+			result.append(curr)
+
+	return result
+
 
 func _build_room_mask() -> void:
 	room_mask.clear()
@@ -337,11 +366,11 @@ func _build_room_collisions() -> void:
 		var polygon := PackedVector2Array()
 		polygon.push_back(component.min()*16+Vector2.ONE*8)
 		debug_polyg.append([component.min()])
-		
+		var min_vert: = Vector2(0,0)
 		while q:
 			var vert:Vector2 = q.pop_back()
 			var min_d := 10e9
-			var min_vert: = Vector2(0,0)
+			min_vert = Vector2(0,0)
 			for c in component:
 				if c not in visited_point:
 					if (vert.distance_to(c) < min_d) and (vert.distance_to(c) != 0):
@@ -353,22 +382,24 @@ func _build_room_collisions() -> void:
 				polygon.append(min_vert*16+Vector2.ONE*8)
 				visited_point.append(min_vert)
 				debug_polyg[-1].append(min_vert)
-		var i: = 0
-		while i < len(polygon)-1:
-			
-			if (polygon[i-1].direction_to(polygon[i+1]) - polygon[i-1].direction_to(polygon[i])).distance_to(Vector2.ZERO) < 0.001:
-				polygon.remove_at(i)
-				i-=1
-				pass
-			i+=1
+		polygon.append(min_vert*16+Vector2.ONE*8)
+		#while i < len(polygon)-1:
+			#
+			#if (polygon[i-1].direction_to(polygon[i+1]) - polygon[i-1].direction_to(polygon[i])).distance_to(Vector2.ZERO) < 0.001:
+				#polygon.remove_at(i)
+				#i-=1
+				#pass
+			#i+=1
+		polygon = simplify_collinear(polygon)
 		debug_vert.append(polygon)
 		#polygon.append(min_vert*16+Vector2.ONE*8)
 		polyg.polygon = polygon
 		polyg.position=Vector2(0,0)
-		Maze.get_node("Area2D").add_child(polyg)
+		var aread2d = Area2D.new()
+		aread2d.add_child(polyg)
+		Maze.add_child(aread2d)
 		if component.size() == 0:
 			continue
-		
 
 
 # Клетка является КОРИДОРОМ, а не комнатой
@@ -381,13 +412,14 @@ func _build_minimap() -> void:
 
 	for y in range(maze_size.y):
 		for x in range(maze_size.x):
-			var cell := Vector2i(x, y)
+			var cell := Vector2(x, y)
 
 			# Нас интересуют только коридоры
 			if not _is_corridor(cell):
 				continue
 
-			for dir in DIRS:
+			for diri in DIRS:
+				var dir:Vector2 = Vector2(diri)
 				var prev := cell - dir
 
 				# Если сзади в этом направлении тоже коридор — значит,
@@ -399,8 +431,8 @@ func _build_minimap() -> void:
 				var cur := cell
 
 				# ЕСЛИ сзади комната — расширяем начало отрезка
-				if room_mask.has(prev):
-					start = prev
+				if room_mask.has(Vector2i(prev)):
+					start =  prev+dir*0.5
 
 				# Тянем отрезок вперёд, пока подряд идут клетки коридора
 				while _is_corridor(cur + dir):
@@ -410,8 +442,8 @@ func _build_minimap() -> void:
 				var next := cur + dir
 
 				# ЕСЛИ впереди комната — добавляем одну клетку комнаты
-				if room_mask.has(next):
-					end = next
+				if room_mask.has(Vector2i(next)):
+					end = next-dir*0.5
 
 				# Добавляем отрезок [start, end]
 				tunnels.append([Vector2(start)*48+Vector2.ONE*24, Vector2(end)*48+Vector2.ONE*24])

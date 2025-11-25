@@ -11,7 +11,7 @@ const INF := 1e20
 
 # ─── NODES / EXPORTS ─────────────────────────────────────────────────────────────
 
-@onready var maze: TileMapLayer = $"../maze"
+@onready var maze: Maze = $"../maze"
 @onready var raycast: RayCast2D = $RayCast2D
 @onready var player: Node2D = %Player
 
@@ -149,6 +149,7 @@ func _step_along_path() -> void:
 		path_index += 1
 		target = path[path_index]
 		global_position = target
+		$"../CanvasLayer2/Control/SubViewportContainer/SubViewport/Node2D/CanvasLayer/Enemy".position = target+Vector2.ONE*48
 	else:
 		path.clear()
 		if state == State.TO_PLAYER:
@@ -164,15 +165,12 @@ func _check_device_reached() -> void:
 
 	var current_cell: Vector2i = world_to_cell(global_position)
 	if current_cell == device_cell:
-		# дошёл до девайса — снова можно реагировать на игрока
-		ignore_player_until_device = false
-		if maze.get_cell_atlas_coords(device_cell) == Vector2i.RIGHT: 
-			maze.set_cell(device_cell,0,Vector2i.RIGHT*2)
+		ignore_player_until_device = false 
+		if not maze.devices.get(device_cell, false):
+			maze.switch_device(device_cell)
 			$"../CanvasLayer2".enabled_lamp += 1
-			for child in get_tree().root.get_children():
-				if child.get_meta("cell_pos", Vector2i(0,0)) == device_cell:
-					if is_instance_of(child, PointLight2D):
-						child.enabled = true
+			if %Player.lights.has(device_cell):
+				%Player.lights[device_cell].enabled = true
 			$"../CanvasLayer2".render()
 		curr_device = (curr_device+1)%devices.size()
 		device_cell = devices.get(curr_device)
@@ -230,12 +228,7 @@ func _on_generator_done() -> void:
 			
 			if atlas == Vector2i.ZERO:
 				astar.set_point_solid(cell, true)
-	for x in range(used_rect.position.x, used_rect.position.x + used_rect.size.x):
-		for y in range(used_rect.position.y, used_rect.position.y + used_rect.size.y):
-			var cell := Vector2i(x, y)
-			var atlas: Vector2i = maze.get_cell_atlas_coords(cell)
-			if atlas == Vector2i.RIGHT*2:
-				devices.append(cell)
+	devices = maze.devices.keys()
 	devices.sort_custom(func(a: Vector2i, b: Vector2i) -> bool:
 		return _astar_distance_cells(world_to_cell(position), a) < _astar_distance_cells(world_to_cell(position), b)
 	)
@@ -252,18 +245,3 @@ func _on_generator_done() -> void:
 	_set_path_to_device()
 
 # ─── DEBUG DRAW ─────────────────────────────────────────────────────────────────
-
-func _draw() -> void:
-	if not debug_draw:
-		return
-
-	if debug_path.size() > 1:
-		for i in range(debug_path.size() - 1):
-			var a: Vector2 = to_local(debug_path[i])
-			var b: Vector2 = to_local(debug_path[i + 1])
-			draw_circle(a, 1.0, Color(1, 0, 0, 1), true)
-			draw_line(a, b, Color(1, 0, 0, 1), 0.25, true)
-
-	if path_index < debug_path.size():
-		var t: Vector2 = to_local(debug_path[path_index])
-		draw_circle(t, 2.0, Color(0, 1, 0, 1))
