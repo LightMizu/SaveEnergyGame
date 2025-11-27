@@ -10,5 +10,5 @@ shader_parameter/edge_strength = 2.999999932944
 shader_parameter/grain_strength = 0.62999998591824
 shader_parameter/contrast = 1.999999966472
 shader_parameter/back_grain = 0.12999999709424
-shader_parameter/paper_color = Color(0.89411765, 0.8235294, 0.7294118, 1)
+shader_parameter/paper_color = Color(0.9254902, 0.85490197, 0.76862746, 1)
 shader_parameter/pencil_color = Color(0.10747976, 0.10747973, 0.10747973, 1)

@@ -1,9 +1,10 @@
-[gd_scene load_steps=33 format=4 uid="uid://d0n8xcj62dm7g"]
+[gd_scene load_steps=34 format=4 uid="uid://d0n8xcj62dm7g"]
 
 [ext_resource type="Texture2D" uid="uid://l23nhnmvj08l" path="res://assets/icon.svg" id="1_w8mkk"]
 [ext_resource type="Script" uid="uid://i7vt7froiv2a" path="res://generator.gd" id="2_cw6co"]
 [ext_resource type="Script" uid="uid://dgii30svrji1m" path="res://maze.gd" id="2_w48qg"]
 [ext_resource type="Texture2D" uid="uid://d11d3alxengr0" path="res://assets/maze_tileset.png" id="3_2kohv"]
+[ext_resource type="Texture2D" uid="uid://k53afxikyxor" path="res://assets/floor.png" id="3_vivmo"]
 [ext_resource type="Script" uid="uid://bjn5v0gf1q1x0" path="res://player.gd" id="4_8cre8"]
 [ext_resource type="Script" uid="uid://dx0jn44phgnbp" path="res://blue.gd" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://0dinvjo5we38" path="res://shock.gd" id="6_7mycd"]
@@ -168,6 +169,15 @@ tile_set = SubResource("TileSet_gnjlo")
 script = ExtResource("2_w48qg")
 
 [node name="Area2D" type="Area2D" parent="maze"]
+
+[node name="TextureRect" type="TextureRect" parent="maze"]
+z_index = -1
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 416.0
+offset_bottom = 224.0
+texture = ExtResource("3_vivmo")
+stretch_mode = 1
 
 [node name="generator" type="Sprite2D" parent="."]
 visible = false
