@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=4 uid="uid://d0n8xcj62dm7g"]
+[gd_scene load_steps=60 format=4 uid="uid://d0n8xcj62dm7g"]
 
 [ext_resource type="Texture2D" uid="uid://l23nhnmvj08l" path="res://assets/icon.svg" id="1_w8mkk"]
 [ext_resource type="Script" uid="uid://i7vt7froiv2a" path="res://generator.gd" id="2_cw6co"]
@@ -20,6 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://cbrgudywgulay" path="res://assets/png-klev-club-h0ad-p-rvanaya-staraya-bumaga-png-14.png" id="11_efxa6"]
 [ext_resource type="Texture2D" uid="uid://cfn8gd6sswia8" path="res://lightbolt.png" id="12_82xsv"]
 [ext_resource type="Shader" uid="uid://cqisoqkue05ke" path="res://assets/pencil_shader.gdshader" id="13_ycdy4"]
+[ext_resource type="AudioStream" uid="uid://b5ll7r1su26yf" path="res://assets/tunetank.com_3643_lost-spaceship_by_finval.mp3" id="21_getpj"]
+[ext_resource type="AudioStream" uid="uid://hsseqiq4xbm" path="res://assets/neiz-esten-elektricheskiy-razryadz-uk_zCgi0HHF.mp3" id="22_d13ii"]
+[ext_resource type="AudioStream" uid="uid://vgxblvvffbfx" path="res://assets/the-usual-calm-simple-sound-of-footsteps-on-the-parquet.wav" id="23_1u8w0"]
+[ext_resource type="AudioStream" uid="uid://cwyf2strsp17q" path="res://assets/95162324438abfe.mp3" id="24_1u8w0"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_cw3ig"]
 tile_data = PackedInt32Array(0, 0, 0, 65536, 65536, 0, 131072, 0, 0, 196608, 65536, 0, 262144, 0, 0, 327680, 65536, 0, 393216, 0, 0, 458752, 65536, 0, 524288, 0, 0, 589824, 65536, 0, 655360, 0, 0, 720896, 65536, 0, 786432, 0, 0, 851968, 65536, 0, 1, 0, 0, 65537, 0, 0, 131073, 0, 0, 196609, 0, 0, 262145, 0, 0, 327681, 0, 0, 393217, 0, 0, 458753, 0, 0, 524289, 0, 0, 589825, 0, 0, 655361, 0, 0, 720897, 0, 0, 786433, 0, 0, 851969, 0, 0, 2, 0, 0, 65538, 65536, 0, 131074, 0, 0, 196610, 65536, 0, 262146, 0, 0, 327682, 65536, 0, 393218, 0, 0, 458754, 65536, 0, 524290, 0, 0, 589826, 65536, 0, 655362, 0, 0, 720898, 65536, 0, 786434, 0, 0, 851970, 65536, 0, 3, 0, 0, 65539, 0, 0, 131075, 0, 0, 196611, 0, 0, 262147, 0, 0, 327683, 0, 0, 393219, 0, 0, 458755, 0, 0, 524291, 0, 0, 589827, 0, 0, 655363, 0, 0, 720899, 0, 0, 786435, 0, 0, 851971, 0, 0, 4, 0, 0, 65540, 65536, 0, 131076, 0, 0, 196612, 65536, 0, 262148, 0, 0, 327684, 65536, 0, 393220, 0, 0, 458756, 65536, 0, 524292, 0, 0, 589828, 65536, 0, 655364, 0, 0, 720900, 65536, 0, 786436, 0, 0, 851972, 65536, 0, 5, 0, 0, 65541, 0, 0, 131077, 0, 0, 196613, 0, 0, 262149, 0, 0, 327685, 0, 0, 393221, 0, 0, 458757, 0, 0, 524293, 0, 0, 589829, 0, 0, 655365, 0, 0, 720901, 0, 0, 786437, 0, 0, 851973, 0, 0, 6, 0, 0, 65542, 65536, 0, 131078, 0, 0, 196614, 65536, 0, 262150, 0, 0, 327686, 65536, 0, 393222, 0, 0, 458758, 65536, 0, 524294, 0, 0, 589830, 65536, 0, 655366, 0, 0, 720902, 65536, 0, 786438, 0, 0, 851974, 65536, 0, 7, 0, 0, 65543, 0, 0, 131079, 0, 0, 196615, 0, 0, 262151, 0, 0, 327687, 0, 0, 393223, 0, 0, 458759, 0, 0, 524295, 0, 0, 589831, 0, 0, 655367, 0, 0, 720903, 0, 0, 786439, 0, 0, 851975, 0, 0, 8, 0, 0, 65544, 65536, 0, 131080, 0, 0, 196616, 65536, 0, 262152, 0, 0, 327688, 65536, 0, 393224, 0, 0, 458760, 65536, 0, 524296, 0, 0, 589832, 65536, 0, 655368, 0, 0, 720904, 65536, 0, 786440, 0, 0, 851976, 65536, 0, 9, 0, 0, 65545, 0, 0, 131081, 0, 0, 196617, 0, 0, 262153, 0, 0, 327689, 0, 0, 393225, 0, 0, 458761, 0, 0, 524297, 0, 0, 589833, 0, 0, 655369, 0, 0, 720905, 0, 0, 786441, 0, 0, 851977, 0, 0, 10, 0, 0, 65546, 65536, 0, 131082, 0, 0, 196618, 65536, 0, 262154, 0, 0, 327690, 65536, 0, 393226, 0, 0, 458762, 65536, 0, 524298, 0, 0, 589834, 65536, 0, 655370, 0, 0, 720906, 65536, 0, 786442, 0, 0, 851978, 65536, 0, 11, 0, 0, 65547, 0, 0, 131083, 0, 0, 196619, 0, 0, 262155, 0, 0, 327691, 0, 0, 393227, 0, 0, 458763, 0, 0, 524299, 0, 0, 589835, 0, 0, 655371, 0, 0, 720907, 0, 0, 786443, 0, 0, 851979, 0, 0, 12, 0, 0, 65548, 65536, 0, 131084, 0, 0, 196620, 65536, 0, 262156, 0, 0, 327692, 65536, 0, 393228, 0, 0, 458764, 65536, 0, 524300, 0, 0, 589836, 65536, 0, 655372, 0, 0, 720908, 65536, 0, 786444, 0, 0, 851980, 65536, 0, 13, 0, 0, 65549, 0, 0, 131085, 0, 0, 196621, 0, 0, 262157, 0, 0, 327693, 0, 0, 393229, 0, 0, 458765, 0, 0, 524301, 0, 0, 589837, 0, 0, 655373, 0, 0, 720909, 0, 0, 786445, 0, 0, 851981, 0, 0)
@@ -739,6 +743,25 @@ color = Color(0, 0, 0.16862746, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ycdy4")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("21_getpj")
+volume_db = -35.0
+autoplay = true
+parameters/looping = true
+
+[node name="Sparkles" type="AudioStreamPlayer" parent="AudioStreamPlayer"]
+stream = ExtResource("22_d13ii")
+volume_db = -10.0
+
+[node name="StepSound" type="AudioStreamPlayer" parent="AudioStreamPlayer/Sparkles"]
+stream = ExtResource("23_1u8w0")
+volume_db = -24.348
+pitch_scale = 1.5
+
+[node name="LightSound" type="AudioStreamPlayer" parent="AudioStreamPlayer"]
+stream = ExtResource("24_1u8w0")
+volume_db = -11.449
 
 [connection signal="done" from="generator" to="Player" method="_on_generator_done"]
 [connection signal="done" from="generator" to="Blue" method="_on_generator_done"]

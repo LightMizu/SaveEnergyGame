@@ -52,6 +52,7 @@ func _physics_process(delta: float) -> void:
 		$Icon/AnimationPlayer.speed_scale = 2
 	
 	if timer > 0.125:
+		
 		$GPUParticles2D.emitting = false
 		if not test_move(global_transform,direction*SPEED):
 			if direction.x:
@@ -71,7 +72,7 @@ func _physics_process(delta: float) -> void:
 			position += direction*SPEED
 			minimap.get_node("Player").position = position+Vector2.ONE*48
 			if direction:
-				
+				$"../AudioStreamPlayer/Sparkles/StepSound".play()
 				for tunnel in $"../generator".tunnels:
 					if visited.has(tunnel):
 						continue
@@ -93,6 +94,7 @@ func _check_on_device():
 	var cell_pos = maze.local_to_map(maze.to_local(global_position))
 	if  maze.devices.get(cell_pos, false):
 		$"../CanvasLayer2".enabled_lamp -= 1
+		$"../AudioStreamPlayer/LightSound".play()
 		maze.switch_device(cell_pos)
 		if lights.has(cell_pos):
 			lights[cell_pos].enabled = false

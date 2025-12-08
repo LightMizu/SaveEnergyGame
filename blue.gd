@@ -167,6 +167,7 @@ func _check_device_reached() -> void:
 	if current_cell == device_cell:
 		ignore_player_until_device = false 
 		if not maze.devices.get(device_cell, false):
+			$"../AudioStreamPlayer/LightSound".play()
 			maze.switch_device(device_cell)
 			$"../CanvasLayer2".enabled_lamp += 1
 			if %Player.lights.has(device_cell):
@@ -205,6 +206,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	
 	# интересует только столкновение с игроком
 	if body == player:
+		$"../AudioStreamPlayer/Sparkles".play()
 		player.timer = -3# сразу переключаемся на поход к девайсу
 		$"../Player/GPUParticles2D".emitting = true
 		ignore_player_until_device = true

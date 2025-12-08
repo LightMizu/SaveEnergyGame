@@ -56,9 +56,6 @@ void fragment() {
 
 	hatch *= shade;
 
-	// --- контур (градиент яркости) ---
-
-	// вот тут был косяк — теперь правильно:
 	vec2 pixel_size = SCREEN_PIXEL_SIZE;
 
 	vec3 c_l = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(-pixel_size.x, 0.0)).rgb;
