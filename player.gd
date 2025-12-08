@@ -44,9 +44,29 @@ func _physics_process(delta: float) -> void:
 	else:
 		direction = direction_y
 	timer += delta
+	if timer < 0.125:
+		if $Icon/AnimationPlayer.current_animation:
+			$Icon/AnimationPlayer.play("idle_"+$Icon/AnimationPlayer.current_animation.split("_")[1])
+		else:
+			$Icon/AnimationPlayer.play("idle_right")
+		$Icon/AnimationPlayer.speed_scale = 2
+	
 	if timer > 0.125:
+		$GPUParticles2D.emitting = false
 		if not test_move(global_transform,direction*SPEED):
-			
+			if direction.x:
+				$Icon/AnimationPlayer.play("walk_right")
+				$Icon.flip_h = direction.x == -1
+				$Icon/AnimationPlayer.speed_scale = 8
+			elif direction.y:
+				$Icon/AnimationPlayer.play("walk_up" if direction.y == -1 else "walk_down")
+				$Icon/AnimationPlayer.speed_scale = 8
+			else:
+				if $Icon/AnimationPlayer.current_animation:
+					$Icon/AnimationPlayer.play("idle_"+$Icon/AnimationPlayer.current_animation.split("_")[1])
+				else:
+					$Icon/AnimationPlayer.play("idle_right")
+				$Icon/AnimationPlayer.speed_scale = 2
 			
 			position += direction*SPEED
 			minimap.get_node("Player").position = position+Vector2.ONE*48
@@ -118,4 +138,3 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 func _on_area_2d_area_exited(area: Area2D) -> void:
 	if area.get_parent() is CharacterBody2D:
 		return
-	enabled_rays = true

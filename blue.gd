@@ -206,6 +206,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	# интересует только столкновение с игроком
 	if body == player:
 		player.timer = -3# сразу переключаемся на поход к девайсу
+		$"../Player/GPUParticles2D".emitting = true
 		ignore_player_until_device = true
 		state = State.TO_DEVICE
 		_set_path_to_device()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://d0n8xcj62dm7g"]
+[gd_scene load_steps=56 format=4 uid="uid://d0n8xcj62dm7g"]
 
 [ext_resource type="Texture2D" uid="uid://l23nhnmvj08l" path="res://assets/icon.svg" id="1_w8mkk"]
 [ext_resource type="Script" uid="uid://i7vt7froiv2a" path="res://generator.gd" id="2_cw6co"]
@@ -8,12 +8,17 @@
 [ext_resource type="Script" uid="uid://bjn5v0gf1q1x0" path="res://player.gd" id="4_8cre8"]
 [ext_resource type="Script" uid="uid://dx0jn44phgnbp" path="res://blue.gd" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://0dinvjo5we38" path="res://shock.gd" id="6_7mycd"]
+[ext_resource type="Texture2D" uid="uid://448gu2wwmrpf" path="res://assets/idle.png" id="7_2cqfq"]
 [ext_resource type="Script" uid="uid://ph7njw2s7mmx" path="res://canvas_layer_2.gd" id="8_5vw27"]
+[ext_resource type="Texture2D" uid="uid://sv77w2ena44c" path="res://assets/S001_nyknck.png" id="8_yaehf"]
 [ext_resource type="Material" uid="uid://csg8hdaplohls" path="res://assets/pencil_material.tres" id="9_4c57u"]
 [ext_resource type="Script" uid="uid://cw4texvbvlcim" path="res://circle.gd" id="9_kek77"]
 [ext_resource type="Script" uid="uid://b3syh6p15tyh2" path="res://light.gd" id="10_4c57u"]
+[ext_resource type="Texture2D" uid="uid://cojpjvfy633gy" path="res://PikPng.com_cat-eyes-png_1557055.png" id="10_82xsv"]
+[ext_resource type="Texture2D" uid="uid://cn8xr6vflo3oy" path="res://new_gradient_texture_2d.tres" id="11_cegan"]
 [ext_resource type="Script" uid="uid://diw1tr4cuw7uc" path="res://enemy.gd" id="11_dg77c"]
 [ext_resource type="Texture2D" uid="uid://cbrgudywgulay" path="res://assets/png-klev-club-h0ad-p-rvanaya-staraya-bumaga-png-14.png" id="11_efxa6"]
+[ext_resource type="Texture2D" uid="uid://cfn8gd6sswia8" path="res://lightbolt.png" id="12_82xsv"]
 [ext_resource type="Shader" uid="uid://cqisoqkue05ke" path="res://assets/pencil_shader.gdshader" id="13_ycdy4"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_cw3ig"]
@@ -91,17 +96,229 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0, 0.5)
 
+[sub_resource type="Animation" id="Animation_074og"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_cegan"]
+resource_name = "idle_down"
+length = 4.0001
+loop_mode = 1
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_yaehf"]
+resource_name = "idle_right"
+length = 4.0
+loop_mode = 1
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2.0077205, 3.0115807),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(2, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_82xsv"]
+resource_name = "idle_up"
+length = 4.0001
+loop_mode = 1
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_ryguw"]
+resource_name = "walk_down"
+length = 8.0001
+loop_mode = 1
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 4), Vector2i(1, 4), Vector2i(2, 4), Vector2i(3, 4), Vector2i(4, 4), Vector2i(5, 4), Vector2i(6, 4), Vector2i(7, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_getpj"]
+resource_name = "walk_right"
+length = 8.0001
+loop_mode = 1
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 3), Vector2i(1, 3), Vector2i(2, 3), Vector2i(3, 3), Vector2i(4, 3), Vector2i(5, 3), Vector2i(6, 3), Vector2i(7, 3)]
+}
+
+[sub_resource type="Animation" id="Animation_d13ii"]
+resource_name = "walk_up"
+length = 8.0001
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 5), Vector2i(1, 5), Vector2i(2, 5), Vector2i(3, 5), Vector2i(4, 5), Vector2i(5, 5), Vector2i(6, 5), Vector2i(7, 5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1u8w0"]
+_data = {
+&"RESET": SubResource("Animation_074og"),
+&"idle_down": SubResource("Animation_cegan"),
+&"idle_right": SubResource("Animation_yaehf"),
+&"idle_up": SubResource("Animation_82xsv"),
+&"walk_down": SubResource("Animation_ryguw"),
+&"walk_right": SubResource("Animation_getpj"),
+&"walk_up": SubResource("Animation_d13ii")
+}
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_7mycd"]
 radius = 7.4535556
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_yaehf"]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_074og"]
+lifetime_randomness = 0.3
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+radial_velocity_min = 19.999977
+radial_velocity_max = 29.999977
+gravity = Vector3(0, 48, 0)
+radial_accel_min = -40.0
+radial_accel_max = 39.999996
+damping_min = 13.000001
+damping_max = 15.000001
+anim_speed_min = 0.7
+anim_speed_max = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lquwl"]
 radius = 79.0
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_getpj"]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ryguw"]
+particle_flag_disable_z = true
+angle_min = 1.0728835e-05
+angle_max = 360.00003
+angular_velocity_min = -1.6093254e-05
+angular_velocity_max = -1.6093254e-05
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = 45.199978
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.2351742e-06
+linear_accel_max = -2.2351742e-06
+radial_accel_min = -2.2351742e-06
+radial_accel_max = -2.2351742e-06
+tangential_accel_min = -100.0
+tangential_accel_max = 99.99999
+scale_min = 0.5
+scale_max = 0.5
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
 [sub_resource type="SystemFont" id="SystemFont_5vw27"]
+oversampling = 0.2
 
 [sub_resource type="LabelSettings" id="LabelSettings_272bh"]
 font = SubResource("SystemFont_5vw27")
-font_size = 52
+font_size = 40
+outline_size = 6
+outline_color = Color(0, 0, 0.02745098, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_yaehf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yaehf"]
+bg_color = Color(0, 0, 0.02745098, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_074og"]
+bg_color = Color(0, 0.71658653, 0.39127278, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+shadow_size = 19
+
+[sub_resource type="Theme" id="Theme_cegan"]
+ProgressBar/colors/font_color = Color(1, 1, 1, 1)
+ProgressBar/colors/font_outline_color = Color(0, 0, 0.02745098, 1)
+ProgressBar/constants/outline_size = 8
+ProgressBar/font_sizes/font_size = 28
+ProgressBar/fonts/font = SubResource("FontVariation_yaehf")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_yaehf")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_074og")
+
+[sub_resource type="LabelSettings" id="LabelSettings_yaehf"]
+font_size = 18
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w48qg"]
 shader = ExtResource("13_ycdy4")
@@ -228,9 +445,19 @@ texture_scale = 0.74
 height = 223.0
 
 [node name="Icon" type="Sprite2D" parent="Player"]
-modulate = Color(0, 1, 0.05, 1)
-scale = Vector2(0.12, 0.12)
-texture = ExtResource("1_w8mkk")
+texture_filter = 3
+position = Vector2(0.33333397, 0)
+texture = ExtResource("7_2cqfq")
+hframes = 8
+vframes = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player/Icon"]
+libraries = {
+&"": SubResource("AnimationLibrary_1u8w0")
+}
+speed_scale = 2.0
+next/walk_up = &"idle_down"
+blend_times = [&"idle_down", &"idle_down", 0.1, &"idle_down", &"idle_right", 0.1]
 
 [node name="Area2D" type="Area2D" parent="Player"]
 
@@ -270,6 +497,12 @@ texture = SubResource("GradientTexture2D_kek77")
 texture_scale = 0.8
 height = 223.0
 
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Player"]
+material = SubResource("CanvasItemMaterial_yaehf")
+emitting = false
+texture = ExtResource("8_yaehf")
+process_material = SubResource("ParticleProcessMaterial_074og")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Blue" type="CharacterBody2D" parent="."]
@@ -286,9 +519,10 @@ shape = SubResource("CircleShape2D_lquwl")
 metadata/_edit_lock_ = true
 
 [node name="Icon" type="Sprite2D" parent="Blue"]
-modulate = Color(0.55751884, 0.8810936, 0.9999998, 1)
-scale = Vector2(0.12, 0.12)
-texture = ExtResource("1_w8mkk")
+z_index = 2
+texture_filter = 1
+scale = Vector2(0.015, 0.015)
+texture = ExtResource("10_82xsv")
 
 [node name="Area2D" type="Area2D" parent="Blue"]
 script = ExtResource("6_7mycd")
@@ -303,6 +537,30 @@ debug_color = Color(0.9571354, 1.732707e-06, 0.5368034, 0.41960785)
 
 [node name="RayCast2D" type="RayCast2D" parent="Blue"]
 collision_mask = 4
+
+[node name="PointLight2D" type="PointLight2D" parent="Blue"]
+color = Color(0.5028172, 0.663302, 1, 1)
+energy = 0.5
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 1.0
+texture = ExtResource("11_cegan")
+texture_scale = 3.0
+
+[node name="PointLight2D" type="PointLight2D" parent="Blue/PointLight2D"]
+color = Color(0.4703402, 0.640011, 1, 1)
+energy = 0.5
+texture = ExtResource("11_cegan")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Blue"]
+modulate = Color(0.78775924, 0.78775924, 0.78775924, 1)
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_getpj")
+scale = Vector2(0.2, 0.2)
+amount = 15
+texture = ExtResource("12_82xsv")
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ryguw")
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 layer = 3
@@ -321,11 +579,14 @@ size_flags_vertical = 3
 [node name="Label" type="Label" parent="CanvasLayer2/Control"]
 top_level = true
 z_index = 1
-layout_mode = 0
-offset_left = 1.0
-offset_right = 351.0
-offset_bottom = 175.0
-text = "ЛАМП: 10/10"
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -66.0
+offset_right = 867.0
+grow_vertical = 0
+text = "Потребителей включенно: 10/10"
 label_settings = SubResource("LabelSettings_272bh")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer2/Control"]
@@ -422,6 +683,32 @@ grow_vertical = 2
 scale = Vector2(0.41, 0.41)
 texture = ExtResource("11_efxa6")
 expand_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer2/Control"]
+layout_mode = 0
+offset_left = 720.0
+offset_top = 8.0
+offset_right = 1144.0
+offset_bottom = 48.0
+theme = SubResource("Theme_cegan")
+value = 100.0
+
+[node name="Label" type="Label" parent="CanvasLayer2/Control/ProgressBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.351
+anchor_top = 0.9760001
+anchor_right = 0.66
+anchor_bottom = 1.8000001
+offset_left = 3.1759949
+offset_top = 0.9599991
+offset_right = -1.8399963
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(63, 0)
+text = "Ресурс земли"
+label_settings = SubResource("LabelSettings_yaehf")
 
 [node name="ColorRect3" type="ColorRect" parent="CanvasLayer2"]
 visible = false
